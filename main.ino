@@ -6,7 +6,7 @@ void setup() {
 }
 
 void loop() {
-  Position.Acquire();
+  atual.Acquire();
   float latToGo, longToGo;
   if(abs(latToGo - atual.getLatitude) > eps && abs(longToGo - atual.getLongitude) > eps){
     // Então aqui a gente coloca a rotina pro carrinho começar a andar em direção a longToGo e latToGo
