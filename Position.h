@@ -22,7 +22,7 @@ class Position
         float longitude;
         TinyGPS *GPS;
         SoftwareSerial *rxTx;
-        float age;
+        long unsigned int age;
         float sats;
 
 };

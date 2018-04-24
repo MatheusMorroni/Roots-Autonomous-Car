@@ -1,4 +1,4 @@
-->include "Position.h"
+#include "Position.h"
 
 
 Position::Position(int rX, int tX)
@@ -17,7 +17,7 @@ void Position::Acquire(){
   do
   {
     while (rxTx->available())
-      GPS->encode(rxTx()->read());
+      GPS->encode(rxTx->read());
   } while (millis() - start < 1000);
     GPS->f_get_position(&this->latitude, &this->longitude, &age);
 }
@@ -31,3 +31,5 @@ float Position::getLatitude()
 {
     return latitude;
 }
+
+
