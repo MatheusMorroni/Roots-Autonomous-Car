@@ -16,7 +16,7 @@ void Position::Acquire(){
     unsigned long start = millis();
   do
   {
-    while (ss.available())
+    while (rxTx.available())
       GPS.encode(rxTx().read());
   } while (millis() - start < 1000);
     GPS.f_get_position(&this->latitude, &this->longitude, &age);
