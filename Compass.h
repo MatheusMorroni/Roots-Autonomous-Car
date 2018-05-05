@@ -59,13 +59,13 @@ graus = heading * 180/M_PI;
   
   if (graus>90 && graus<180)
   {
-    /*fazer o carro ficar paralelo com o traçado*/
+    /*fazer o carro ficar paralelo com o traçado, para esse caso específico o carro deve girar a roda para direita para ficar paralelo*/
     lbgraus = graus-90;
     /*enviar o dado para que a class control gire a roda do carro para a esquerda em lbgraus*/
   }
   
   if (graus>180 && graus<270)
   {
-    /*fazer o carro dicar paralelo com o traçado*/
+    /*fazer o carro dicar paralelo com o traçado, para esse caso específico o carro deve girar a roda para esquerda para ficar paralelo*/
     rbgraus = graus-180;
     /*enviar o dado para que a class control gira a roda do carro para a direita em rbgraus*/
