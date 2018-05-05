@@ -4,7 +4,7 @@
 HMC5883L bussola;
 
 int i;
-float graus;
+float graus, lgraus, rgaus, lbgraus, rbgraus;
 float precisao;
 
 void setup()
