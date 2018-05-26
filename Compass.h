@@ -18,6 +18,7 @@ Class Compass
   private:
   int i;
   float graus;
+  float graus0;
   float precisao;
 };
 
