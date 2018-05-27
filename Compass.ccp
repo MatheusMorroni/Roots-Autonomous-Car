@@ -4,7 +4,7 @@
 HMC5883L bussola;
 
 int i;
-float graus0, graus, lgraus, rgaus, lbgraus, rbgraus;
+float graus0, graus, dgraus, dgraus1, dgraus2, latitude0, longitude0;
 float precisao;
 
 void setup()
@@ -44,176 +44,32 @@ graus = heading * 180/M_PI;
 
   }
   graus = precisao/100;
-  graus0 = 
-  
-      if (graus>0 && graus<90)
-  {
-    lgraus = graus0 - graus;
-      if(lgraus<0);
-     {
-      if(|lgraus|<90 && |lgraus|>0)
+  longitude0 = NN*1380 + MM*1 + SS/60 /*a longitude é dada pelo GPS como NN°MM'SS"*/
+  latitude0 = NN*1380 + MM*1 + SS/60 /*a latitude segue o mesmo princípio da longitude*/
+  graus0 = arctan(latitude0/longitude0)
+  dgraus = graus0 - graus
+      if(dgraus<0)
       {
-        /*enviar o dado para que a class control gire a roda do carro para a 
-      }
-      if(|lgraus|<180 && |lgraus|>90
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a 
-      }
-      if(|lgraus|<270 && |lgraus|>180)
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a 
-      }
-      if(|lgraus|<360 && |lgraus|>270)
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a
-     }
-      if(lgraus>0);
+        if(|dgraus|<=180 && |dgraus|>0)
         {
-        if(|lgraus|<90 && |lgraus|>0)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
+          /*enviar o dado para que a class control gire o carro para a direita em dgraus*/
         }
-       if(|lgraus|<180 && |lgraus|>90
+        if(|dgraus|>180 && |dgraus|<=360)
         {
-         /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-       if(|lgraus|<270 && |lgraus|>180)
-        {
-         /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|lgraus|<360 && |lgraus|>270)
-        {
-         /*enviar o dado para que a class control gire a roda do carro para a
+          dgraus1 = 360 - dgraus;
+          /*enviar o dado para que a class control gire o carro para a esquerda em dgraus1*/
         }
       }
-  }
-   
-      if (graus>270 && graus<360)
-  {
-    rgraus = graus0 - graus;
-      if(rgraus<0)
+      if(dgraus>0)
       {
-        if(|rgraus|<90 && |rgraus|>0)
+        if(|dgraus|<=180 && |dgraus|>0)
         {
-          /*enviar o dado para que a class control gire a roda do carro para a 
+          /*enviar o dado para que a class control gire o carro para a esquerda em dgraus*/
         }
-        if(|rgraus|<180 && |rgraus|>90
+        if(|dgraus|>180 && |dgraus|<=360)
         {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|rgraus|<270 && |rgraus|>180)
-        {
-         /*enviar o dado para que a class control gire a roda do carro para a 
-       }
-       if(|rgraus|<360 && |rgraus|>270)
-        {
-         /*enviar o dado para que a class control gire a roda do carro para a
-       }
-      if(rgraus>0)
-      {
-        if(|rgraus|<90 && |rgraus|>0)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|rgraus|<180 && |rgraus|>90
-        {
-         /*enviar o dado para que a class control gire a roda do carro para a 
-       }
-       if(|rgraus|<270 && |rgraus|>180)
-       {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-       if(|rgraus|<360 && |rgraus|>270)
-       {
-         /*enviar o dado para que a class control gire a roda do carro para a
+          dgraus2 = 360 - dgraus;
+          /*enviar o dado para que a class control gire o carro para a direita em dgraus*/
         }
       }
-  }
-  
-      if(graus>90 && graus<180)
-    {
-      /*fazer o carro dicar paralelo com o traçado, para esse caso específico o carro deve girar a roda para direita para ficar paralelo*/
-      lbgraus = graus0 - graus;
-        if(lbgraus<0);
-        {
-          if(|lbgraus|<90 && |lbgraus|>0)
-          {
-            /*enviar o dado para que a class control gire a roda do carro para a 
-          }
-          if(|lbgraus|<180 && |lbgraus|>90
-          {
-            /*enviar o dado para que a class control gire a roda do carro para a 
-          }
-          if(|lbgraus|<270 && |lbgraus|>180)
-          {
-            /*enviar o dado para que a class control gire a roda do carro para a 
-          }
-          if(|lbgraus|<360 && |lbgraus|>270)
-          {
-            /*enviar o dado para que a class control gire a roda do carro para a
-          }
-        }
-      if(lbgraus>0)
-      {
-        if(|lbgraus|<90 && |lbgraus|>0)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|lbgraus|<180 && |lbgraus|>90
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|lbgraus|<270 && |lbgraus|>180)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|lbgraus|<360 && |lbgraus|>270)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a
-        }
-      }
-  }
       
-      if(graus>180 && graus<270)
-  {
-    /*fazer o carro dicar paralelo com o traçado, para esse caso específico o carro deve girar a roda para esquerda para ficar paralelo*/
-    rbgraus = graus0 - graus;
-      if(rbgraus<0);
-     {
-      if(|rbgraus|<90 && |rbgraus|>0)
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a 
-      }
-      if(|rbgraus|<180 && |rbgraus|>90
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a 
-      }
-      if(|rbgraus|<270 && |rbgraus|>180)
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a 
-      }
-      if(|rbgraus|<360 && |rbgraus|>270)
-      {
-        /*enviar o dado para que a class control gire a roda do carro para a
-      }
-     }
-      if(rbgraus>0);
-      {
-        if(|rbgraus|<90 && |rbgraus|>0)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|rbgraus|<180 && |rbgraus|>90
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|rbgraus|<270 && |rbgraus|>180)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a 
-        }
-        if(|rbgraus|<360 && |rbgraus|>270)
-        {
-          /*enviar o dado para que a class control gire a roda do carro para a
-        }
-      }
-  }
