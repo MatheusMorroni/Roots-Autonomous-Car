@@ -44,10 +44,10 @@ graus = heading * 180/M_PI;
 
   }
   graus = precisao/100;
-  longitude0 = NN*1380 + MM*1 + SS/60 /*a longitude é dada pelo GPS como NN°MM'SS"*/
-  latitude0 = NN*1380 + MM*1 + SS/60 /*a latitude segue o mesmo princípio da longitude*/
-  graus0 = arctan(latitude0/longitude0)
-  dgraus = graus0 - graus
+  longitude0 = NN*1380 + MM*1 + SS/60; /*a longitude é dada pelo GPS como NN°MM'SS"*/
+  latitude0 = NN*1380 + MM*1 + SS/60; /*a latitude segue o mesmo princípio da longitude*/
+  graus0 = arctan(latitude0/longitude0);
+  dgraus = graus0 - graus;
       if(dgraus<0)
       {
         if(|dgraus|<=180 && |dgraus|>0)
