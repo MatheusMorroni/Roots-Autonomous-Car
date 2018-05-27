@@ -8,10 +8,9 @@
 Class Compass
 {
   public:
-  float lgraus;
-  float rgaus;
-  float lbgraus;
-  float rbgraus;
+  float dgraus;
+  float dgraus1;
+  float dgraus2;
   
   protected:
   
@@ -19,6 +18,8 @@ Class Compass
   int i;
   float graus;
   float graus0;
+  float latitude0;
+  float longitude0;
   float precisao;
 };
 
