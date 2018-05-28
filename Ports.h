@@ -3,8 +3,10 @@
 #define PORTS_H
 
 //potencia
-#define CONTROLE_MOTOR_F null
-#define CONTROLE_MOTOR_B null
+#define DIR_MOTOR_D 8
+#define DIR_MOTOR_E 9
+#define PWM_MOTOR_D 10
+#define PWM_MOTOR_E 11
 #define SERVO null
 
 //localizacao
