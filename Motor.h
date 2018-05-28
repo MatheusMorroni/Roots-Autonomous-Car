@@ -1,7 +1,8 @@
+#include "Arduino.h"
 #ifndef MOTOR_H
 #define MOTOR_H
 #include "Ports.h"
-#define MIN_VAL = 140 //(255 - 140)
+#define MIN_VAL 140 //(255 - 140)
 
 class Motor {
     public:
@@ -14,7 +15,7 @@ class Motor {
         void parar();
     
     private:
-        short vel;
+        short minVel;
 
 };
 

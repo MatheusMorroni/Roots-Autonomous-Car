@@ -59,13 +59,13 @@ void Motor::voltar(short _angulo){
 }
 
 void  Motor::rotacionar(short _angulo){
-    if(_angulo>0 && angulo<=10){
+    if(_angulo>0 && _angulo<=10){
         digitalWrite(DIR_MOTOR_D, 0);
         digitalWrite(DIR_MOTOR_E, 1);
         analogWrite(PWM_MOTOR_E, 255-map(_angulo, 0,10, 140, 255));
         analogWrite(PWM_MOTOR_D, 255-map(_angulo, 0,10, 140, 255));
     }
-    if(_angulo>0 && angulo<=10){
+    if(_angulo>0 && _angulo<=10){
         digitalWrite(DIR_MOTOR_D, 1);
         digitalWrite(DIR_MOTOR_E, 0);
         analogWrite(PWM_MOTOR_E, 255-map(_angulo, 0,10, 140, 255));
