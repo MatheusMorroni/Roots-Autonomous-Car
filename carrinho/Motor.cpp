@@ -124,3 +124,4 @@ void Motor::teste(){
     analogWrite(IA_MOTOR_E, 0);
 
 }
+
