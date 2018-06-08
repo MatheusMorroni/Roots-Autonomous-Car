@@ -15,7 +15,7 @@ Wire.begin();
   bussola.SetMeasurementMode(Measurement_Continuous);
 }
 
-void loop()
+void()
 {
   precisao = 0;
 
@@ -70,6 +70,10 @@ graus = heading * 180/M_PI;
         {
           dgraus2 = 360 - dgraus;
           /*enviar o dado para que a class control gire o carro para a direita em dgraus*/
+        }
+        if(dgraus == 0)
+        {
+          /*o carro pode seguir reto*/
         }
       }
       
