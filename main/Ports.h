@@ -7,17 +7,16 @@
 #define IA_MOTOR_E 9
 #define IB_MOTOR_D 6
 #define IB_MOTOR_E 11
-//localizacao
-#define GPS_TX 20
-#define GPS_RX 10
 
+//localizacao
+#define GPS_RX 4
 //Bussola
 #define BUSS_SDA A4
 #define BUSS_SCL A5
 
 //Control
-#define BOTAO 10
-#define LED 11
+#define BOTAO 3
+#define LED 13
 
 
 

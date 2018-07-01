@@ -15,7 +15,6 @@ class Compass{
         float angulo();
         void definePrecisao(int p);
         void calibrar();
-        
     private:
         HardwareSerial& serial;
         HMC5883L compass;

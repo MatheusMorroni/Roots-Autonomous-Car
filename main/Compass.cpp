@@ -1,8 +1,7 @@
 #include "Compass.h"
 
 Compass::Compass(HardwareSerial& _serial, Control& _control) : serial(_serial), control(_control)
-{
-  serial.println("Initialize HMC5883L");
+{  serial.println("Initialize HMC5883L");
   while (!compass.begin())
   {
     serial.println("Could not find a valid HMC5883L sensor, check wiring!");
@@ -27,7 +26,7 @@ float Compass::angulo()
   // (+) Positive or (-) for negative
   // For Bytom / Poland declination angle is 4'26E (positive)
   // Formula: (deg + (min / 60.0)) / (180 / M_PI);
-  float declinationAngle = (4.0 + (26.0 / 60.0)) / (180 / M_PI);
+  float declinationAngle =(37.0 + (55.0 / 60.0)) / (180 / M_PI);
   heading += declinationAngle;
 
   // Correct for heading < 0deg and heading > 360deg
@@ -92,7 +91,7 @@ void Compass::calibrar()
     // Calculate offsets
     float offX = (maxX + minX) / 2;
     float offY = (maxY + minY) / 2;
-
+    serial.print("Teste");
     serial.print(mag.XAxis);
     serial.print(":");
     serial.print(mag.YAxis);

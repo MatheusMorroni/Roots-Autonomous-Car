@@ -1,26 +1,31 @@
 #include "Position.h"
 #include "Ports.h"
 
-void Position::begin()
+Position::Position(HardwareSerial& _serial) : serial(_serial)
 {
-
-    TinyGPS *GPS = new TinyGPS;
-    SoftwareSerial *rxTx = new SoftwareSerial(GPS_RX, GPS_TX);
+    serial.println("GPS construido");
+    ss = new SoftwareSerial(GPS_RX, 20);
+    gps = new TinyGPS();
+    ss->begin(4800);
 }
 
-Position::~Position()
-{
-    //dtor
+bool Position::Acquire(){
+    smartdelay(1000);
+    gps->f_get_position(&latitude, &longitude);
+    if(latitude == TinyGPS::GPS_INVALID_F_ANGLE || longitude == TinyGPS::GPS_INVALID_F_ANGLE){
+        return 0;
+    }
+    return 1;
 }
 
-void Position::Acquire(){
-    unsigned long start = millis();
-  do
+void Position::smartdelay(unsigned long ms)
+{
+  unsigned long start = millis();
+  do 
   {
-    while (rxTx->available())
-      GPS->encode(rxTx->read());
-  } while (millis() - start < 1000);
-    GPS->f_get_position(&this->latitude, &this->longitude, &age);
+    while (ss->available())
+      gps->encode(ss->read());
+  } while (millis() - start < ms);
 }
 
 float Position::getLongitude()
@@ -31,9 +36,5 @@ float Position::getLongitude()
 float Position::getLatitude()
 {
     return latitude;
-}
-
-bool Position::sinalOK(){
-    return 0;
 }
 

@@ -5,26 +5,26 @@
 #include "Control.h"
 #include "Position.h"
 
-
-Comm comm;
-Control control;
-Compass compass(Serial, control);
-Motor motor;
-Position position;
 float checkpoints[20][2];
 int numeroDeRegistros;
 void setup() {
+  Comm comm;
+  Motor motor;
+  Position position(Serial);
+  Control control;
   Serial.begin(9600);
+  Compass compass(Serial, control);
   Serial.println("Inicializando...");
-  control.begin();
+  //control.begin();
   motor.begin();
-  position.begin();
+  //compass.calibrar();
   //inicio do registro de checkpoints
   do{
     Serial.println("Aguardando sinal de GPS...");
     control.piscaLed(1,500);
-  } while (!position.sinalOK());
+  } while (!position.Acquire());
   Serial.println("OK!");
+  Serial.println("Inicializando GPS");
   Serial.println("Registrando checkpoints...");
   control.piscaLed(3,200);
   int i=0;
@@ -35,13 +35,20 @@ void setup() {
     }
     segundos = control.botaoPressionado();
     if(segundos<=2000){
-      position.Acquire();
+      if (position.Acquire()){
       checkpoints[i][0] =  position.getLatitude();
       checkpoints[i][1] = position.getLongitude();
       Serial.print("Checkpoint registrado:\nLatitude: ");
-      Serial.println(checkpoints[i][0]);
+      Serial.println(checkpoints[i][0], 8);
       Serial.print("Longitude: ");
-      Serial.println(checkpoints[i][1]);
+      Serial.println(checkpoints[i][1], 8);
+      Serial.print("Bussola: ");
+      Serial.println(compass.angulo(), 5);
+      Serial.println("");}
+      else {
+        Serial.print("Erro");
+        i--;
+      }
     }
     else{
       if (i == 0){
@@ -58,6 +65,7 @@ void setup() {
   //Registro de checkpoints acaba aqui
   Serial.println("Coloque o carrinho no lugar de partida.");
   Serial.println("Quando tudo estiver pronto aperte o botão");
+  delay(1000);
   control.botaoPressionado();
   Serial.println("Iniciando em 5...");
   delay(1000);
@@ -76,3 +84,5 @@ void setup() {
 void loop() {
 
 }
+
+
