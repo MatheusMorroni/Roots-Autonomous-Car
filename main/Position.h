@@ -9,12 +9,12 @@
 class Position
 {
     public:
-        Position(int rX, int tX);
+        void begin();
         virtual ~Position();
         void Acquire();
         float getLongitude();
         float getLatitude();
-
+        bool sinalOK();
     protected:
 
     private:

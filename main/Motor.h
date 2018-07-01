@@ -6,13 +6,13 @@
 
 class Motor {
     public:
-        Motor();
-        //Aceita valores de -100 a 100(ré e frente) para vel e 0 a 10 para accel
+        void begin();
         void avancar(short _angulo);
         void voltar(short _angulo);
         short defVel(short _vel);
         void rotacionar(short _angulo);
         void parar();
+        void teste();
     
     private:
         short minVel;

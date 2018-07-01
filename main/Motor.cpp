@@ -1,6 +1,6 @@
 #include "Motor.h"
 
-Motor::Motor(){
+void Motor::begin(){
     pinMode(IA_MOTOR_D, OUTPUT);
     pinMode(IA_MOTOR_E, OUTPUT);
     pinMode(IB_MOTOR_D, OUTPUT);

@@ -1,50 +1,32 @@
 #include "Control.h"
 
-Control::Control(){
-    servo.attach(SERVO);
-
+void Control::begin(){
+    pinMode(LED, OUTPUT);
+    pinMode(BOTAO, INPUT);
 }
 
-void Control::speed(int _speed){
-    int speed = _speed;
-    if (_speed > 100) speed=100;
-    if (_speed < 100) speed=-100;
-    if(speed >= 0){
-        speed = map(speed, 0, 100, 0 , 255);
-        analogWrite(CONTROLE_MOTOR_F, speed);
-        analogWrite(CONTROLE_MOTOR_B, 0);
-    }
-    if(speed < 0){
-        speed = map(-speed, 0, 100, 0 , 255);
-        analogWrite(CONTROLE_MOTOR_F, 0);
-        analogWrite(CONTROLE_MOTOR_B, speed);
+void Control::piscaLed(int x, int t){
+    int i;
+    for (i = 1; i <= x; i++){
+        digitalWrite(LED, 1);
+        delay(t);
+        digitalWrite(LED, 0);
+        delay(t);
     }
 }
 
-void Control::speedAccel(int _speed){
-    int speed = _speed;
-    if (_speed > 100) speed=100;
-    if (_speed < 100) speed=-100;
-    if(speed >= 0){
-        speed = map(speed, 0, 100, 0 , 255);
-        analogWrite(CONTROLE_MOTOR_F, speed);
-        analogWrite(CONTROLE_MOTOR_B, 0);
-    }
-    if(speed < 0){
-        speed = map(-speed, 0, 100, 0 , 255);
-        analogWrite(CONTROLE_MOTOR_F, 0);
-        analogWrite(CONTROLE_MOTOR_B, speed);
-    }
+bool Control::botaoApertado(){
+    if (digitalRead(BOTAO)) return 1;
+    return 0;
 }
 
-void Control::turn(int _turn){
-    int turn = turn;
-    if (turn > 90) turn=90;
-    if (_turn < 90) speed=-90;
-    turn += 90;
-    servo.write(turn);
-}
-
-int Control::servoState(){
-    return servo.read();
+int Control::botaoPressionado(){
+    int start = millis();
+    if (digitalRead(BOTAO)){
+        while(digitalRead(BOTAO)){
+            delay(1);
+        }
+        return millis()-start;
+    }
+    else return 0;
 }

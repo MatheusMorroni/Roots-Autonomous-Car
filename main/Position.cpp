@@ -1,10 +1,11 @@
 #include "Position.h"
+#include "Ports.h"
 
-
-Position::Position(int rX, int tX)
+void Position::begin()
 {
+
     TinyGPS *GPS = new TinyGPS;
-    SoftwareSerial *rxTx = new SoftwareSerial(rX, tX);
+    SoftwareSerial *rxTx = new SoftwareSerial(GPS_RX, GPS_TX);
 }
 
 Position::~Position()
@@ -32,4 +33,7 @@ float Position::getLatitude()
     return latitude;
 }
 
+bool Position::sinalOK(){
+    return 0;
+}
 
