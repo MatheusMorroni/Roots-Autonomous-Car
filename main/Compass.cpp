@@ -26,7 +26,7 @@ float Compass::angulo()
   // (+) Positive or (-) for negative
   // For Bytom / Poland declination angle is 4'26E (positive)
   // Formula: (deg + (min / 60.0)) / (180 / M_PI);
-  float declinationAngle =(37.0 + (55.0 / 60.0)) / (180 / M_PI);
+  float declinationAngle =-(37.0 + (55.0 / 60.0)) / (180 / M_PI);
   heading += declinationAngle;
 
   // Correct for heading < 0deg and heading > 360deg
