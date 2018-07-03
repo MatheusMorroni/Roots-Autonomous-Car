@@ -21,24 +21,20 @@ void Motor::parar(){
     analogWrite(IA_MOTOR_E, 0);
     analogWrite(IB_MOTOR_D, 0);
     analogWrite(IB_MOTOR_E, 0);
-    delay(100);
+    delay(10);
 }
 
 void Motor::avancar(short _angulo){
     if (_angulo < -10 || _angulo>10) return;
     analogWrite(IB_MOTOR_D, 0);
     analogWrite(IB_MOTOR_E, 0);
-    delay(100);
+    delay(10);
     if (_angulo>0){
         analogWrite(IA_MOTOR_D,map(_angulo, 0,10,minVel, 255));
-        Serial.println(map(_angulo, 0,10,minVel, 255));
-        Serial.println(minVel);
         analogWrite(IA_MOTOR_E, minVel);
     }
     if (_angulo<0){
         analogWrite(IA_MOTOR_E, map(_angulo, 0,-10,minVel, 255));
-        Serial.println(map(_angulo, 0,-10,minVel, 255));
-        Serial.println(minVel);
         analogWrite(IA_MOTOR_D, minVel);
     }
     if (_angulo==0){
@@ -51,7 +47,7 @@ void Motor::voltar(short _angulo){
     if (_angulo < -10 || _angulo>10) return;
     analogWrite(IA_MOTOR_D, 0);
     analogWrite(IA_MOTOR_E, 0);
-    delay(100);
+    delay(10);
         if (_angulo>0){
         analogWrite(IB_MOTOR_D,map(_angulo, 0,10,minVel, 255));
         analogWrite(IB_MOTOR_E, minVel);
@@ -65,21 +61,45 @@ void Motor::voltar(short _angulo){
         analogWrite(IB_MOTOR_D, minVel);
     }
 }
-
+/*
 void  Motor::rotacionar(short _angulo){
     if(_angulo>0 && _angulo<=10){
         analogWrite(IB_MOTOR_D, 0);
         analogWrite(IA_MOTOR_E, 0);
-        delay(100);
+        delay(10);
         analogWrite(IB_MOTOR_E, map(_angulo, 0,10, minVel, 255));
         analogWrite(IA_MOTOR_D, map(_angulo, 0,10, minVel, 255));
     }
     if(_angulo<0 && _angulo>=-10){
         analogWrite(IA_MOTOR_D, 0);
         analogWrite(IB_MOTOR_E, 0);
-        delay(100);
+        delay(10);
         analogWrite(IA_MOTOR_E, map(_angulo, 0,-10, minVel, 255));
         analogWrite(IB_MOTOR_D, map(_angulo, 0,-10, minVel, 255));
+    }
+    if (_angulo == 0){
+        analogWrite(IA_MOTOR_D, 0);
+        analogWrite(IA_MOTOR_E, 0);
+        analogWrite(IB_MOTOR_E, 0);
+        analogWrite(IB_MOTOR_D, 0);
+    }
+}
+*/
+
+void  Motor::rotacionar(short _angulo){
+    if(_angulo>0 && _angulo<=10){
+        analogWrite(IB_MOTOR_D, 0);
+        analogWrite(IB_MOTOR_E, 0);
+        analogWrite(IA_MOTOR_E, 0);
+        delay(10);
+        analogWrite(IA_MOTOR_D, map(_angulo, 0,10, minVel, 255));
+    }
+    if(_angulo<0 && _angulo>=-10){
+        analogWrite(IA_MOTOR_D, 0);
+        analogWrite(IB_MOTOR_D, 0);
+        analogWrite(IB_MOTOR_E, 0);
+        delay(10);
+        analogWrite(IA_MOTOR_E, map(_angulo, 0,-10, minVel, 255));
     }
     if (_angulo == 0){
         analogWrite(IA_MOTOR_D, 0);
