@@ -6,6 +6,8 @@
 #include "Position.h"
 #include "math.h"
 
+#define TRESHOLD_MOTOR 30 //em graus
+
 float checkpoints[20][2];
 int numeroDeRegistros;
 Comm* comm;
@@ -15,7 +17,7 @@ Position* position;
 Compass* compass;
   
 void setup() {
-  float pontosReferencia[3][2];
+  float pontosReferencia[3][3];
   comm = new Comm();
   motor = new Motor();
   control = new Control();
@@ -33,30 +35,10 @@ void setup() {
   } while (!position->Acquire());
   Serial.println("OK!");
   Serial.println("Inicializando GPS");
-  // Serial.println("Registrando pontos de referência");
-  //  int i=0;
-  // for(i = 0; i < 3; i++){
-  //   while(!control->botaoApertado()){
-  //     delay(1);
-  //   }
-  //   if (position->Acquire()){
-  //     pontosReferencia[i][0] =  position->getLatitude();
-  //     pontosReferencia[i][1] = position->getLongitude();
-  //     Serial.print("Ponto de referencia registrado:\nLatitude: ");
-  //     Serial.println(pontosReferencia[i][0], 8);
-  //     Serial.print("Longitude: ");
-  //     Serial.println(pontosReferencia[i][1], 8);}
-  //     else {
-  //       Serial.print("Erro");
-  //       i--;
-  //     }
-  //   }
- 
-    
   Serial.println("Registrando checkpoints...");
   control->piscaLed(3,200);
   int segundos;
-  for(i = 0; i < 20; i++){
+  for(int i = 0; i < 20; i++){
     while(!control->botaoApertado()){
       delay(1);
     }
@@ -65,10 +47,13 @@ void setup() {
       if (position->Acquire()){
       checkpoints[i][0] =  position->getLatitude();
       checkpoints[i][1] = position->getLongitude();
+      checkpoints[i][2] = compass->angulo();
       Serial.print("Checkpoint registrado:\nLatitude: ");
       Serial.println(checkpoints[i][0], 8);
       Serial.print("Longitude: ");
       Serial.println(checkpoints[i][1], 8);
+      Serial.print("Angulo: ");
+      Serial.println(checkpoints[i][2], 8);
       }
       else {
         Serial.print("Erro");
@@ -86,6 +71,7 @@ void setup() {
         break;
       }
     }
+    motor->defVel(3);
   }
   //Registro de checkpoints acaba aqui
   Serial.println("Coloque o carrinho no lugar de partida.");
@@ -300,38 +286,131 @@ void setup() {
 // }
 
 // the loop function runs over and over again forever
-void loop() {
+// void loop() {
   
   
-  Serial.println("------------");
-  float latGPS;
-  float lonGPS;
-  float direcao;
-  double angulo;
-  double distancia;
-  for(int i = 0; i < numeroDeRegistros; i ++) {
-   Serial.println("Indo para:");
-   Serial.println(checkpoints[i][0]);
-   Serial.println(checkpoints[i][1]);
+//   Serial.println("------------");
+//   float latGPS;
+//   float lonGPS;
+//   float direcao;
+//   double angulo;
+//   double distancia;
+//   for(int i = 0; i < numeroDeRegistros; i ++) {
+//    Serial.println("Indo para:");
+//    Serial.println(checkpoints[i][0]);
+//    Serial.println(checkpoints[i][1]);
    
-   while (true) {
-   position->Acquire();
-   latGPS = position->getLatitude();
-   lonGPS = position->getLongitude();
-   direcao = compass->angulo();
-   //angulo = anguloParaIr(latGPS, lonGPS, checkpoints[i][1], checkpoints[i][0]);
-   angulo = anguloParaIr(latGPS, lonGPS, checkpoints[i][0], checkpoints[i][1]);
-   distancia = distanciaAoCheckpoint(latGPS, lonGPS, checkpoints[i][0], checkpoints[i][1]);
-   Serial.print("Angulo sem bussola:");
-   Serial.println(angulo);
-   Serial.print("Distancia:");
-   Serial.println(distancia);
-   Serial.print("Angulo com bussola:");
-   Serial.println(angulo-direcao);
-   delay(300);
-   Serial.println("------------");
-   }
+//    while (true) {
+//    position->Acquire();
+//    latGPS = position->getLatitude();
+//    lonGPS = position->getLongitude();
+//    direcao = compass->angulo();
+//    //angulo = anguloParaIr(latGPS, lonGPS, checkpoints[i][1], checkpoints[i][0]);
+//    angulo = anguloParaIr(latGPS, lonGPS, checkpoints[i][0], checkpoints[i][1]);
+//    distancia = distanciaAoCheckpoint(latGPS, lonGPS, checkpoints[i][0], checkpoints[i][1]);
+//    Serial.print("Angulo sem bussola:");
+//    Serial.println(angulo);
+//    Serial.print("Distancia:");
+//    Serial.println(distancia);
+//    Serial.print("Angulo com bussola:");
+//    Serial.println(angulo-direcao);
+//    delay(300);
+//    Serial.println("------------");
+//    }
+//   }
+// }
+
+float gpslong, gpslat;
+int valorMotor;
+float anguloObjetivo;
+float ultimoPrint = 0;
+
+bool atingiuPonto(int i){
+  float distancia = TinyGPS::distance_between(gpslat, gpslong, checkpoints[i][0], checkpoints[i][1]);
+  bool retorno = 0;
+
+  if ((millis()-ultimoPrint)>=3000){
+    ultimoPrint = millis();
+    Serial.print("Distancia: ");
+    Serial.print(distancia);
   }
+  if(distancia <= 5){
+    retorno = 1;
+  }
+  return retorno;
 }
 
+float calculaCorrecao(float phi, float teta){ //ANGULO QUE ESTOU, ANGULO QUE QUERO IR
+  float angulo;
+  if (teta - phi > 180.0 || teta - phi < -180.0){
+    if(teta - phi >=0){
+      angulo = (teta-phi)-360.0;
+    }
+    else{
+      angulo = (teta-phi)+360.0;
+    }
+  }
+  else {
+    angulo = teta - phi;
+  }
+  return angulo;
+}
 
+void loop() {
+  float angulo, diferenca;
+  bool giroCheck; //0 para direita, 1 para esquerda
+  double lastMillis = millis();
+  for(int i =0; i < numeroDeRegistros; i++){
+    if(i!=0){
+      anguloObjetivo = checkpoints[i][2];
+      motor->parar();
+      if (calculaCorrecao(compass->angulo(), anguloObjetivo)>=0)giroCheck = 0;
+      else giroCheck = 1;
+      delay(1000);
+      while(true){
+        if(!giroCheck) motor->rotacionar(5);
+        else motor->rotacionar(-5);
+        angulo = calculaCorrecao(compass->angulo(), anguloObjetivo);
+        if(angulo<=3.0 && angulo>=-3.0){
+          motor->parar();
+          break;
+        }
+        delay(1000);
+      }
+    }
+    anguloObjetivo = checkpoints[i][2];
+    while(!atingiuPonto(i)){
+      angulo = compass->angulo();
+      if (millis() - lastMillis >= 250){
+        lastMillis = millis();
+        position->Acquire();
+        gpslong = position->getLongitude();
+        gpslat = position->getLatitude();
+
+        Serial.println("Captei posição: ");
+        Serial.print("LAT: ");
+        Serial.println(gpslat);
+        Serial.print("LONG: ");
+        Serial.println(gpslong);
+      }
+      angulo = calculaCorrecao(angulo, anguloObjetivo);
+      if (angulo<= TRESHOLD_MOTOR && angulo>=(-1*TRESHOLD_MOTOR)){
+        valorMotor = map(-1*TRESHOLD_MOTOR, TRESHOLD_MOTOR, -10, 10, angulo);
+      }
+      else{
+        if (angulo>=0){
+          valorMotor = 10;
+        }
+        else {
+          valorMotor <= -10;
+        }
+      }
+      motor->avancar(valorMotor);
+  }
+}
+  motor->parar();
+  Serial.println("TERMINEI!!!!");
+  while(true){
+    delay(1000);
+  }
+}
